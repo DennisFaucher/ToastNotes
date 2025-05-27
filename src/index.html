@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ToastNotes</title>
+  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/dcurtis/markdown-mark/master/png/32x20-solid.png" />
+</head>
+<body>
+  <div class="header">
+    <h1>ToastNotes</h1>
+    <div class="toolbar">
+      <input id="noteName" type="text" placeholder="Note name" />
+      <button id="newBtn" title="New"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+      <button id="openBtn" title="Open"><i class="fa-solid fa-folder-open"></i></button>
+      <button id="renameBtn" title="Rename">
+        <img src="https://www.svgrepo.com/show/486816/rename.svg" alt="Rename" style="width:18px;height:18px;vertical-align:middle;">
+      </button>
+      <button id="saveBtn" title="Save"><i class="fa-solid fa-floppy-disk"></i></button>
+      <button id="deleteBtn" title="Delete"><i class="fa-solid fa-bomb"></i></button>
+      <button id="dateBtn" title="Insert Date"><i class="fa-solid fa-calendar"></i></button>
+      <button id="imageBtn" title="Insert Image"><i class="fa-solid fa-image"></i></button>
+      <button id="printBtn" title="Print"><i class="fa-solid fa-print"></i></button>
+      <input type="file" id="imageInput" accept="image/*" style="display:none" />
+    </div>
+  </div>
+  <div id="editor"></div>
+
+  <!-- Modal for opening notes -->
+  <div id="openModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span id="closeModal" class="close">&times;</span>
+      <h3>Select a note to open</h3>
+      <input id="noteSearch" type="text" placeholder="Search notes..." style="width: 100%; margin-bottom: 10px;"/>
+      <ul id="noteList"></ul>
+    </div>
+  </div>
+
+  <!-- External libraries -->
+  <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
