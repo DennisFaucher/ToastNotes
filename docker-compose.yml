@@ -1,0 +1,13 @@
+services:
+  toastnotes:
+    build: .
+    ports:
+      - "40036:80"
+    volumes:
+      - ./src:/usr/share/nginx/html:ro
+      - ./files:/files
+    networks:
+      - toastnotes-network
+
+networks:
+  toastnotes-network:
