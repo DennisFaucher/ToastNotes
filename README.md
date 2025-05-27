@@ -1,6 +1,7 @@
 # ToastNotes
 
 A simple, browser-based Markdown note-taking app with a modern UI, built using [Toast UI Editor](https://ui.toast.com/tui-editor), Node.js, and Docker. Notes are saved as Markdown files on the server and can be created, edited, renamed, deleted, printed, or exported.
+![Screenshot 2025-05-27 at 10 33 23 AM](https://github.com/user-attachments/assets/fc97c792-96d3-4d87-a3e9-c327fc09250d)
 
 ## Features
 
