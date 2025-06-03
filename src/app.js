@@ -69,8 +69,73 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       };
 
+      // Add this function to open the folder picker for new notes
+      async function pickNoteDirectory() {
+        const modal = document.getElementById('openModal');
+        const noteList = document.getElementById('noteList');
+        const noteSearch = document.getElementById('noteSearch');
+        noteList.innerHTML = '<li>Loading...</li>';
+        modal.style.display = 'block';
+
+        // Fetch the list of notes (for folder structure)
+        const res = await fetch('/api/list-with-content');
+        const data = await res.json();
+        if (data.success) {
+          // Build a tree of folders only (ignore files)
+          const allNotePaths = data.notes.map(n => n.name);
+          const folderTree = {};
+          allNotePaths.forEach(notePath => {
+            const parts = notePath.split('/');
+            let node = folderTree;
+            for (let i = 0; i < parts.length - 1; i++) {
+              if (!node[parts[i]]) node[parts[i]] = {};
+              node = node[parts[i]];
+            }
+          });
+
+          // Render the folder tree
+          function renderFolderTree(node, parentPath = '') {
+            const ul = document.createElement('ul');
+            for (const key in node) {
+              const li = document.createElement('li');
+              li.innerHTML = `<i class="fa-regular fa-folder" style="margin-right:6px;"></i>${key}`;
+              li.style.fontWeight = 'bold';
+              li.style.cursor = 'pointer';
+              li.onclick = (e) => {
+                e.stopPropagation();
+                // Set noteName to selected folder path + '/'
+                document.getElementById('noteName').value = (parentPath ? parentPath + '/' : '') + key + '/';
+                modal.style.display = 'none';
+              };
+              // Recursively render subfolders
+              const childUl = renderFolderTree(node[key], (parentPath ? parentPath + '/' : '') + key);
+              if (Object.keys(node[key]).length > 0) {
+                li.appendChild(childUl);
+              }
+              ul.appendChild(li);
+            }
+            return ul;
+          }
+
+          noteList.innerHTML = '';
+          const treeEl = renderFolderTree(folderTree);
+          noteList.appendChild(treeEl);
+        } else {
+          noteList.innerHTML = '<li>Error loading folders</li>';
+        }
+
+        // Hide search for this modal usage
+        noteSearch.style.display = 'none';
+      }
+
       document.getElementById('newBtn').onclick = function() {
-        document.getElementById('noteName').value = '';
+        // Open folder picker modal
+        pickNoteDirectory().then(() => {
+          // After modal closes, user can type the note name after the selected path
+          // Optionally, focus the noteName field
+          setTimeout(() => document.getElementById('noteName').focus(), 100);
+        });
+        // Clear editor content
         editor.setMarkdown('');
       };
 
