@@ -27,7 +27,6 @@ const upload = multer({ storage });
 
 app.post('/api/upload-image', upload.single('image'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
-  // Return the relative path for markdown
   res.json({ 
     success: true, 
     url: `/files/images/${req.file.filename}` 
@@ -81,14 +80,17 @@ function listMarkdownFiles(dir, baseDir = '') {
 
 app.get('/api/list', (req, res) => {
   try {
-    const notes = listMarkdownFiles(FILES_DIR).map(f => f.replace(/\.md$/, ''));
+    const notes = listMarkdownFiles(FILES_DIR)
+      .filter(f => f.endsWith('.md')) // Only .md files
+      .map(f => f.replace(/\.md$/, ''));
+    console.log('Notes found:', notes);
     res.json({ success: true, notes });
   } catch (err) {
     res.status(500).json({ error: 'Failed to list notes' });
   }
 });
 
-// Add this endpoint to your server.js
+// List all notes with their content
 app.get('/api/list-with-content', (req, res) => {
   try {
     const notes = listMarkdownFiles(FILES_DIR).map(f => f.replace(/\.md$/, ''));
@@ -152,4 +154,7 @@ app.post('/api/rename', (req, res) => {
   });
 });
 
-app.listen(80, () => console.log('ToastNotes server running'));
+app.listen(80, () => {
+  console.log('ToastNotes server running');
+//  console.log('ToastNotes server.js loaded at', new Date());
+});
